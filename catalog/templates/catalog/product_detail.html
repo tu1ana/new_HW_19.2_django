@@ -13,7 +13,7 @@
                     <p class="card-text">{{ object.description }}</p>
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                         <li>Категория: {{ object.category }}</li>
-                        <li>Дата создания: {{object.date_created}}</li>
+                        <li>Дата создания: {{ object.date_created }}</li>
                         <li>Дата последнего изменения: {{ object.date_last_modified }}</li>
                         <li>Цена: ₽{{ object.price }}</li>
                         <li>Принадлежит: {{ object.auth_user|default:'-' }}</li>
@@ -23,6 +23,8 @@
                     {% if user.is_authenticated %}
                     <a href="{% url 'catalog:update_product' object.pk %}" type="button"
                class="btn btn-sm btn-block btn-outline-primary">Изменить</a>
+                    <a href="{% url 'catalog:delete_product' object.pk %}" type="button"
+               class="btn btn-sm btn-block btn-outline-danger">Удалить</a>
                     {% else %}
 
                     {% endif %}
