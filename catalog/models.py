@@ -5,11 +5,23 @@ from config import settings
 NULLABLE = {'blank': True, 'null': True}
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name='Наименование')
+    description = models.TextField(verbose_name='Описание')
+
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name = 'категория'
+        verbose_name_plural = 'категории'
+
+
 class Product(models.Model):
     name = models.CharField(max_length=250, verbose_name='Наименование')
     description = models.TextField(**NULLABLE, verbose_name='Описание')
     photo = models.ImageField(upload_to='products/', **NULLABLE, verbose_name='Изображение(превью)')
-    category = models.CharField(max_length=100, verbose_name='Категория')
+    category = models.ForeignKey(Category, to_field='name', on_delete=models.CASCADE, verbose_name='Категория')
     price = models.FloatField(verbose_name='Цена')
     date_created = models.DateField(verbose_name='Дата создания')
     date_last_modified = models.DateField(verbose_name='Дата последнего изменения')
@@ -36,18 +48,6 @@ class Version(models.Model):
     class Meta:
         verbose_name = 'версия'
         verbose_name_plural = 'версии'
-
-
-class Category(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Наименование')
-    description = models.TextField(verbose_name='Описание')
-
-    def __str__(self):
-        return f'{self.name}'
-
-    class Meta:
-        verbose_name = 'категория'
-        verbose_name_plural = 'категории'
 
 
 class BlogEntry(models.Model):
