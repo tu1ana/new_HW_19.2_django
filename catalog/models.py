@@ -27,6 +27,7 @@ class Product(models.Model):
     date_last_modified = models.DateField(verbose_name='Дата последнего изменения')
 
     auth_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE, verbose_name='Авторизованный пользователь')
+    is_published = models.BooleanField(default=False, verbose_name='Опубликовано')
 
     def __str__(self):
         return f'{self.name}'
