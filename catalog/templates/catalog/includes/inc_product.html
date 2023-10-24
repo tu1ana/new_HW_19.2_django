@@ -14,15 +14,16 @@
                 <li> Номер версии: {{ version.number }}</li>
                 {% endif %}
             </ul>
+            {% if perms.catalog.view_product %}
             <a href="{% url 'catalog:view_product' object.pk %}" type="button"
                class="btn btn-sm btn-block btn-outline-primary">Подробнее</a>
-            {% if user.is_authenticated %}
+            {% endif %}
+            {% if perms.catalog.set_published %}
             <a href="{% url 'catalog:update_product' object.pk %}" type="button"
                class="btn btn-sm btn-block btn-outline-primary">Изменить</a>
-            {% else %}
+            {% endif %}
 <!--            <a href="#" type="button"-->
 <!--               class="btn btn-sm btn-block btn-outline-secondary">Изменить</a>-->
-            {% endif %}
         </div>
     </div>
 </div>
