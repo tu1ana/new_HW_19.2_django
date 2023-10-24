@@ -1,4 +1,5 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 from django.forms import inlineformset_factory
 from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
@@ -40,6 +41,7 @@ def contacts(request):
 
 class ProductDetailView(DetailView):
     model = Product
+    # permission_required = ('catalog.change_description', 'catalog.set_published')
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -55,10 +57,14 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
+    # permission_required = ('catalog:change_description', 'catalog.change_category', 'catalog.set_published')
+
+    def test_func(self):
+        return self.request.user == self.get_object().auth_user
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -79,9 +85,13 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class ProductDeleteView(LoginRequiredMixin, DeleteView):
+class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:home')
+    permission_required = 'catalog.delete_product'
+
+    # def test_func(self):
+    #     return self.request.user == self.get_object().auth_user
 
 
 class BlogEntryCreateView(CreateView):
