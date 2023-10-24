@@ -20,10 +20,14 @@
                     </ul>
                     <a href="{% url 'catalog:home' %}" type="button"
                        class="btn btn-sm btn-block btn-outline-primary">Назад</a>
+                    {% if perms.catalog.set_published %}
                     <a href="{% url 'catalog:update_product' object.pk %}" type="button"
                class="btn btn-sm btn-block btn-outline-primary">Изменить</a>
+                    {% endif %}
+                    {% if perms.catalog.delete_product %}
                     <a href="{% url 'catalog:delete_product' object.pk %}" type="button"
                class="btn btn-sm btn-block btn-outline-danger">Удалить</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
